@@ -1,0 +1,31 @@
+{
+  "name": "j5-redux",
+  "version": "0.0.0",
+  "description": "A boilerplate for setting up a J5 & redux project",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive",
+    "lint": "eslint --ext .js app"
+  },
+  "repository": "https://github.com/deathbearbrown/j5-redux.git",
+  "keywords": [
+    "Tessel"
+  ],
+  "license": "MIT",
+  "readme": "A boilerplate for setting up a J5 & redux project",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^1.10.3",
+    "install": "^0.8.1",
+    "johnny-five": "rwaldron/johnny-five",
+    "lodash.isequal": "^4.2.0",
+    "mocha": "^2.5.3",
+    "mock-firmata": "0.0.7",
+    "npm": "^3.9.5",
+    "object-assign": "^4.1.0",
+    "redux": "^3.5.2",
+    "redux-mock-store": "^1.1.2",
+    "sinon": "^1.17.4",
+    "tessel-io": "rwaldron/tessel-io"
+  }
+}
