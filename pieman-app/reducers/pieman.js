@@ -2,8 +2,8 @@
 var types = require('../constants/actionTypes');
 
 var initialState = {
-  listening: false,
-  round: null,
+  listening: true,
+  round: 0,
   pressCount: 0,
   sequence: [],
   gameover: false,
@@ -14,14 +14,16 @@ function piemanReducer(state, action) {
   state = state || initialState;
 
   if (action.type === types.ADVANCE_ROUND) {
-    state.pressCount = 0;
-    state.round++;
-    return state;
+    var newState = Object.assign({}, state);
+    newState.pressCount = 0;
+    newState.round = state.round + 1;
+    return newState;
   }
 
   if (action.type === types.ADD_PRESS) {
-    state.pressCount++;
-    return state;
+    var newState = Object.assign({}, state);
+    newState.pressCount = state.pressCount + 1;
+    return newState;
   }
 
   if (action.type === types.NEW_GAME) {
@@ -29,8 +31,9 @@ function piemanReducer(state, action) {
   }
 
   if (action.type === types.RESET_PRESS) {
-    state.pressCount = 0;
-    return state;
+    var newState = Object.assign({}, state);
+    newState.pressCount = 0;
+    return newState;
   }
 
   if (action.type === types.RESET_GAME) {
@@ -38,13 +41,15 @@ function piemanReducer(state, action) {
   }
 
   if (action.type === types.LISTENING_ON) {
-    state.listening = action.on;
-    return state;
+    var newState = Object.assign({}, state);
+    newState.listening = action.on;
+    return newState;
   }
 
   if (action.type === types.SET_SEQUENCE) {
-    state.sequence = action.sequence;
-    return state;
+    var newState = Object.assign({}, state);
+    newState.sequence = action.sequence;
+    return newState;
   }
 
   if (action.type === types.SET_GAMEOVER) {

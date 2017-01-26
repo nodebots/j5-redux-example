@@ -1,5 +1,5 @@
 'use strict';
-var redux = require('redux');
+var redux = require('../../node_modules/redux/dist/redux.min'); //jfc my dude.
 var createStore = redux.createStore;
 var applyMiddleware = redux.applyMiddleware;
 var rootReducer = require('../reducers');

@@ -7,7 +7,6 @@ var gameActions = require('../actions/piemanActions');
 // I want these console logs to show up when you're playing the game as a UI component
 // but I don't want them to show up when I'm running my tests
 // For no reason other than it looks ugly...
-var showLogs = !process.env.IS_TEST_MODE;
 
 /**
  * @namespace
@@ -21,8 +20,13 @@ var game = {
    */
   advanceGame: function(color, wantedColor){
     store.dispatch(gameActions.addPress());
-    if (showLogs) console.log('correct!', color + ' is ' + wantedColor + "! Advance game!");
+    console.log('correct!', color + ' is ' + wantedColor + "! Advance game!");
     store.dispatch(gameActions.advance());
+  },
+
+  addPress: function(color, wantedColor){
+    store.dispatch(gameActions.addPress());
+    console.log('correct!', color + ' is ' + wantedColor + "! Press next in sequence...");
   },
 
   /**
@@ -30,9 +34,9 @@ var game = {
    * @return {void}
    */
   winGame: function(){
-    if (showLogs) console.log('you won!');
+    console.log('you won!');
     store.dispatch(gameActions.gameover(true));
-    if (showLogs) console.log('press any button to play again!');
+    console.log('press any button to play again!');
     return;
   },
 
@@ -43,9 +47,10 @@ var game = {
    * @return {void}
    */
   loseGame:function(color, wantedColor){
-    if (showLogs) console.log('Oh No!', color + ' is not ' + wantedColor + '. ~Game over~');
+    console.log('Oh No!', color + ' is not ' + wantedColor + '. ~Game over~');
     store.dispatch(gameActions.gameover(true));
-    if (showLogs) console.log('press any button to play again!');
+    console.log('press any button to play again!');
+    return;
   },
   /**
    * Logic around the button listeners for the game mechanics
@@ -58,14 +63,18 @@ var game = {
     var round = allstate.pieman.round;
     var colors = allstate.pieman.sequence;
     var wantedColor = colors[pressCount];
-    if (color === wantedColor) {
-      if (round > pressCount || round === pressCount) {
+
+    console.log(pressCount, colors.length - 1)
+    if (wantedColor && color === wantedColor) {
         if (pressCount === colors.length - 1) {
           this.winGame();
-        } else {
+        }
+        if (round > pressCount){
+          this.addPress(color, wantedColor);
+        }
+        if (round === pressCount){
           this.advanceGame(color, wantedColor);
         }
-      }
     } else {
       this.loseGame(color, wantedColor);
     }
@@ -100,7 +109,7 @@ var buttons = function() {
     store: {
       name: 'game_buttons',
       defaults: {
-        status: 'booga'
+        status: null
       }
     },
     eventsDispatch: {
@@ -146,7 +155,7 @@ var buttons = function() {
         // only dispatch events if listener is set to true
         // otherwise you will interfere with the game sequence
         if (allState.pieman.listening) {
-          if (allState.pieman.gameover && state.status === 'release'){
+          if (!allState.pieman.newGame && state.status === 'press'){
             store.dispatch(setJ5('rgb', {on: false, rainbow: false}, 'game_light')); // turn off led
             store.dispatch(gameActions.newGame()); // new game
             return;

@@ -1,8 +1,11 @@
 'use strict';
+
 var five = require("johnny-five");
 var Tessel = require("tessel-io");
 var Pieman = require('./pieman-app/Game');
 var Store = require('./pieman-app/store');
+
+process.env.NODE_ENV = 'production';
 
 /**
  * On board ready it runs the game code located in 'pieman-app'

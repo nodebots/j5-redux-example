@@ -48,11 +48,13 @@ var Game = function(config) {
   var spec = config || {};
 
   this.state_cache = {
-    round: null
+    gameover: false,
+    round: null,
+    newGame: false
   };
 
   // state tracking
-  this.rounds = spec.rounds || 1;
+  this.rounds = spec.rounds || 5;
 
   // set color sequence in redux (this is the source of truth for the game)
   this.sequence = this.setSequence(this.rounds);
@@ -69,12 +71,12 @@ var Game = function(config) {
   this.unsubscribeGameOver = store.subscribe(this.gameOverListener.bind(this));
   this.gameOverListener();
 
-  console.log('Press any button to start a game.')
+  console.log('press any button to play...')
 };
 
 Game.prototype = {
 
-  roundListener: function(){
+  setUpRoundListener: function(){
     if (this.unsubscribe){
       this.unsubscribe();
     }
@@ -91,7 +93,7 @@ Game.prototype = {
     // create new sequence of colors
     this.sequence = this.setSequence(this.rounds);
 
-    this.roundListener();
+    this.setUpRoundListener();
 
     // reset game
     store.dispatch(resetGame());
@@ -103,8 +105,10 @@ Game.prototype = {
    * @return {void}
    */
   gameOverListener: function() {
-    var gameover = store.getState().pieman.gameover;
-    if (gameover) {
+    var previous = this.state_cache.gameover;
+    var gameover  = this.state_cache.gameover = store.getState().pieman.gameover;
+    if ((previous !== gameover) && gameover) {
+      console.log('Game over Listener');
       store.dispatch(setJ5('rgb', {
         color: "white",
         blink: true
@@ -117,8 +121,9 @@ Game.prototype = {
    * @return {void}
    */
   newGameListener: function() {
-    var newGame = store.getState().pieman.newGame;
-    if (newGame) {
+    var previous = this.state_cache.newGame;
+    var newGame = this.state_cache.newGame = store.getState().pieman.newGame;
+    if ((previous !== newGame) && newGame) {
       this.newGame();
     }
   },
@@ -130,6 +135,7 @@ Game.prototype = {
     var previous = this.state_cache.round;
     var current = this.state_cache.round = this.getRoundState(store.getState());
     if (current !== previous) {
+      console.log('round listener');
       this.playSequence(current);
     }
   },

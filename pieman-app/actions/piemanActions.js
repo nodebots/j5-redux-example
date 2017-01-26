@@ -19,13 +19,13 @@ function resetGame() {
     data: {
       pressCount: 0,
       round: 0,
-      listening: false,
-      newGame: false
+      listening: false
     }
   };
 }
 
 function advanceRound() {
+  console.log('advanced round');
   return {
     type: 'ADVANCE_ROUND'
   };
@@ -55,7 +55,11 @@ function gameover(state) {
     type: 'SET_GAMEOVER',
     data: {
       listening: true,
-      gameover: state
+      round: 0,
+      pressCount: 0,
+      sequence: [],
+      gameover: false,
+      newGame: false
     }
   };
 }

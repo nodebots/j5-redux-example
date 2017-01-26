@@ -49,6 +49,9 @@ var RGBLed = function() {
         if (state.on) {
           j5.color(state.color);
           j5.on();
+          setTimeout(function(){
+             j5.stop().off();
+          },300);
         } else {
           j5.stop().off();
         }
